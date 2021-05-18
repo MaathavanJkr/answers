@@ -26,6 +26,9 @@
         font-size: 50px;
         text-align: center;
       }
+      .output.animating {
+        animation: background-fade 0.25s;
+      }
       html,
       body {
         height: 100%;
@@ -42,9 +45,21 @@
           color: #fff;
           background-color: #007bff;
       }
+      .increment {
+        width: 45px;
+        margin-left: 2px;
+      }
+      @keyframes background-fade {
+        0% {
+          background-color: rgb(157, 255, 157);
+        }
+        100% {
+          background-color: none;
+        }
+      }
     </style>
   </head>
-  <body class="d-flex flex-column">
+  <body class="d-flex flex-column" onload="displayCheAns();displayPhyAns();">
     <div
       class="jumbotron text-center bg-dark text-white"
       style="margin-top: -5px"
@@ -67,6 +82,7 @@
           <div class="tab-content" id="pills-tabContent">
 
             <div class="tab-pane fade show active" id="pills-physics" role="tabpanel" aria-labelledby="pills-physics-tab">
+              <div id="phyOutput" class="output"></div> <br>
               <div class="input-group mb-3">
                 <div class="input-group-prepend">
                   <span class="input-group-text">Year</span>
@@ -122,18 +138,15 @@
                 <div class="input-group-prepend">
                   <span class="input-group-text">Q. No.</span>
                 </div>
-                <input type="number" id="phyQNo" class="form-control" value="1" />
+                <input type="number" id="phyQNo" class="form-control" value="1" /><button type="button" class="btn btn-secondary increment" onclick="increment('phy', 1)">+</button><button type="button" class="btn btn-secondary increment" onclick="increment('phy', -1)">-</button>
                 <br />
               </div>
-              <button id="phyAnsBtn" type="button" class="btn btn-secondary">
-                Get Answer
-              </button>
-              <br />
-              <div id="phyOutput" class="output"></div>
             </div>
 
             <div class="tab-pane fade" id="pills-chemistry" role="tabpanel" aria-labelledby="pills-chemistry-tab">
-            <div class="input-group mb-3">
+            
+              <div id="cheOutput" class="output"></div><br>
+              <div class="input-group mb-3">
               <div class="input-group-prepend">
                 <span class="input-group-text">Year</span>
               </div>
@@ -191,20 +204,46 @@
               <div class="input-group-prepend">
                 <span class="input-group-text">Q. No.</span>
               </div>
-              <input type="number" id="cheQNo" class="form-control" value="1" />
+              <input type="number" id="cheQNo" class="form-control" value="1" /><button type="button" class="btn btn-secondary increment" onclick="increment('che', 1)">+</button><button type="button" class="btn btn-secondary increment" onclick="increment('che', -1)">-</button>
               <br />
             </div>
-            <button id="cheAnsBtn" type="button" class="btn btn-secondary">
-              Get Answer
-            </button>
-            <br />
-            <div id="cheOutput" class="output"></div>
           </div>
           </div>
         </div>
       </div>
     </div>
+    <div class="container px-4 col-lg-4">
+      <!-- Button trigger modal -->
+    <button type="button" class="btn btn-info float-right" data-toggle="modal" data-target="#exampleModalCenter">
+      Help and Feedback
+    </button>
 
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Help</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            1. Select the Subject <br>
+            2. Select the year of pastpaper <br>
+            3. Enter the Question Number<br>
+            and the Answer will be displayed for you. <br><br>
+            Your Feedback will help me to improve this tool. Send a mail to <b>maathumaathavan@gmail.com</b>.
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <a href="https://maathavanjkr.github.io"><button type="button" class="btn btn-primary">Contact Me</button></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <br/>
     <footer
       id="sticky-footer"
       class="py-4 bg-dark text-white-50"
@@ -220,6 +259,19 @@
       </div>
     </footer>
     <script>
+      function increment(sub, inc) {
+        el = document.getElementById(sub + "QNo");
+        incVal = parseInt(el.value) + inc;
+        if (0 < incVal && 61 > incVal) {
+          el.value = incVal;
+          if (sub == 'phy') {
+            displayPhyAns();
+          } else if (sub == "che") {
+            displayCheAns();
+          }
+        }
+      }
+
       const phyAnswers = [['4', '2', '2', '2', '5', '4', '4', '3', '4', '5', '1', '4', '5', '3', '3', '2', '1', '5', '1', '5', '2', '5', 'XX', '4', '4', '2', '3', '2', '3', '3', '1', '4', '1', '2', '4', '3', 'XX', '2', '2', '3', '4', '4', '4', '4', '1', '2', '3', '4', '3', '2', '1', '2', '5', '5', '4', '5', '5', '2', '1', '3'], ['5', '3', '3', '2', '2', '5', '2', '1', '2', '3', '4', '2', '3', '3', '3', '5', '2', '2', '2', '3', '3', '2', '3', '3', '1', '4', '4', 'XX', '1', '2', '3', '1', '3', '5', '4', '4', '2', '3', '5', '4', '5', '5', '4', '5', '4', '2', '3', '5', '3', '5', 'XX', '2', 'XX', '4', '5', '5', '1', '3', '3', '2'], ['4', '2', '1', '1', '1', '4', '4', '2', 
 '1', '2', '4', '5', '3', 'XX', '4', '4', '3', '1', '2', '4', '4', '3', '3', '1', '3', '2', '1', '3', '2', '2', '2', '2', '2', '3', '2', '3', '5', '1', '5', '2', '3', '5', '2', '1', '4', '4', '4', '2', '1', '2', '3', '3', '3', '2', 'XX', '2', '2', '4', '3', '3'], ['4', '1', '5', '3', '1', '5', '3', '5', '5', '3', '1', '5', '5', '1', '4', '4', '3', '4', '4', '5', '3', '5', '2', '1', '2', '3', '3', '4', '4', '1', '1', '3', '5', '1', 
 '1', '2', '2', '4', '2', '2', '2', '1', '3', '2', '1', '4', '1', '4', '1', '4', '4', '5', '4', '5', '2', '1', '2', '2', '3', '4'], ['5', '4', '5', '5', '5', '4', '4', '4', '4', '2', '2', '5', '2', '4', '3', '2', 'All', '1', '3', '2', '1', '2', '5', '1', '4', '5', '3', 'All', '1', '1', '5', '1', '4', '2', '4', '5', '5', '1', '5', '3', '3', '2', '5', '1', '3', '2', '2', '2', '1', '5', '4', '4', '2', '3', '3', '5', '3', '1', '4', '3'], ['5', '3', '2', '1', '5', '5', '2', '5', '4', '1', '4', '5', '1', '3', '3', '5', '5', '2', '1', '2', '5', '1', '4', '4', '5', '4', '2', '2', '1', '5', '5', '4', '2', '2', '2', '2', '1', '4', '3', '4', '2', '4', '2', '3', '5', '5', '2', '3', '2', '3', '1', '4', '5', '3', '1', '5', '1', '3', '3', '3'], ['4', '2', 'XX', '5', '2', '4', '2', '4', '1', '2', '1', '4', '2', '3', '1', '5', '1', '4', '4', '3', '2', '3', '1', '4', '4', '4', '1', '3', '5', '3', '3', '4', '2', '2', '4', '3', '5', '2', '4', '4', '3', '3', '3', '3', '4', '3', '1', '4', '4', '4', '3', '2', '3', '1', 'XX', '1', '4', '2', '4', '3'], ['1', '2', '4', '2', '3', '2', '3', '5', '3', '4', '3', '4', '2', '4', '3', '2', '5', '5', '1', '3', '2', '1', '4', '2', '5', '2', '4', '5', '2', '3', '2', '1', '4', '1', '5', '5', '4', '4', '2', '3', '4', '3', '2', 'XX', '4', '5', 'XX', '2', '5', '1', '3', '3', '1', '5', 'XX', '5', '4', '1', '1', '3'], ['4', '5', '2', '5', '5', '2', '3', '1', '3', '5', '5', '3', '2', '5', '1', '3', '5', '3', '1', '3', '1', '1', '4', '1', '4', '4', 'XX', '4', '4', '2', '5', '3', '3', '2', '3', '1', '4', '4', '4', '2', '4', '2', 'All', '1', '2', '1', '1', '2', '5', '5', '3', '3', '3', '3', '3', '1', '3', '2', '5', '4'], ['5', '5', '3', '2', '4', 'All', '2', '2', '5', '3', '3', '2', '5', '4', '3', '3', 
@@ -241,17 +293,27 @@
 'lol']]
 
       document.getElementById("phyQNo").oninput = function () {
-        if (this.value > 60) {
+        if (this.value !== ""){
+          if (this.value > 60) {
           this.value = 60;
+        } else if (this.value < 0) {
+          this.value = 1;
+        }
+        displayPhyAns();
         }
       };
-      document.getElementById("phyAnsBtn").onclick = function () {
-        document.getElementById("phyOutput").innerHTML =
+      function displayPhyAns() {
+        var output = document.getElementById("phyOutput")
+        output.innerHTML =
           phyAnswers[document.getElementById("phyYear").value][
             document.getElementById("phyQNo").value - 1
           ];
+        output.classList.add("animating");
+        var listener = output.addEventListener('animationend', function() {
+          output.classList.remove("animating");
+          output.removeEventListener('animationend', listener);
+        });
       };
-
       const cheAnswers = [
         ['5', '1', '3', '3', '2', '4', '2', '1', '2', '5', '2', '2', '5', '3', '4', '3', '4', '1', '4', '1', '5', '5', '5', '3', '3', '4', '5', '4', '3', '4', '2', '1', '1', '5', '2', '5', '3', '4', '1', '5', '4', '4', '1', '4', '2', '3', '1', '3', '4', '4', '2', '2', '5', '2', '3', '4', '3', '2', '5', '1'], ['1', '3', '3', '5', '2', '4', '2', '3', '4', '5', '1', '3', '5', '4', '3', '4', '2', '1', '2', '1', '5', '4', '3', '4', '5', '2', 
 '3', '5', '2', '2', '5', '1', '3', '4', '2', '2', '3', '1', '1', '1', '2', '1', '4', '4', '4', '2', '3', '5', '1', '4', '3', '4', '1', '3', '4', '1', '4', '5', '3', '5'], ['4', '5', '2', '3', '5', '4', '5', '5', '2', 
@@ -274,12 +336,19 @@
         if (this.value > 60) {
           this.value = 60;
         }
+        displayCheAns();
       };
-      document.getElementById("cheAnsBtn").onclick = function () {
-        document.getElementById("cheOutput").innerHTML =
+      function displayCheAns() {
+        var output = document.getElementById("cheOutput")
+        output.innerHTML =
           cheAnswers[document.getElementById("cheYear").value][
             document.getElementById("cheQNo").value - 1
           ];
+        output.classList.add("animating");
+        var listener = output.addEventListener('animationend', function() {
+          output.classList.remove("animating");
+          output.removeEventListener('animationend', listener);
+        });
       };
     </script>
   </body>
